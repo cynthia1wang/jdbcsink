@@ -6,25 +6,6 @@ import java.sql.{Connection,Statement,DriverManager}
 import org.apache.spark.sql.ForeachWriter
 import org.apache.spark.sql.Row
 
-object DNSstatJob{
-
-val schema: StructType = StructType(
-        Seq(StructField("Vendor", StringType,true),
-         StructField("Id", IntegerType,true),
-         StructField("Time", LongType,true),
-         StructField("Conn", StructType(Seq(
-                                        StructField("Proto", IntegerType, true), 
-                                        StructField("Sport", IntegerType, true), 
-                                        StructField("Dport", IntegerType, true), 
-                                        StructField("Sip", StringType, true), 
-                                        StructField("Dip", StringType, true)
-                                        )), true),
-        StructField("Dns", StructType(Seq(
-                                        StructField("Domain", StringType, true), 
-                                        StructField("IpCount", IntegerType, true), 
-                                        StructField("Ip", StringType, true) 
-                                        )), true)))
-
 class JDBCSink() extends ForeachWriter[Row]{
  val driver = "com.mysql.jdbc.Driver"
       var connection:Connection = _
@@ -49,6 +30,25 @@ class JDBCSink() extends ForeachWriter[Row]{
         connection.close
       }
 }
+
+object DNSstatJob{
+
+val schema: StructType = StructType(
+        Seq(StructField("Vendor", StringType,true),
+         StructField("Id", IntegerType,true),
+         StructField("Time", LongType,true),
+         StructField("Conn", StructType(Seq(
+                                        StructField("Proto", IntegerType, true), 
+                                        StructField("Sport", IntegerType, true), 
+                                        StructField("Dport", IntegerType, true), 
+                                        StructField("Sip", StringType, true), 
+                                        StructField("Dip", StringType, true)
+                                        )), true),
+        StructField("Dns", StructType(Seq(
+                                        StructField("Domain", StringType, true), 
+                                        StructField("IpCount", IntegerType, true), 
+                                        StructField("Ip", StringType, true) 
+                                        )), true)))
 
     def main(args: Array[String]) {
     val spark=SparkSession
